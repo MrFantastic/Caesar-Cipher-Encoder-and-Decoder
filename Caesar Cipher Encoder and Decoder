@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Caesar Cipher Encoder and Decoder</title>
+</head>
+<body>
+    <h1>Caesar Cipher Encoder and Decoder</h1>
+
+    <!-- Input fields for message and shift value -->
+    <label for="message">Enter the message:</label>
+    <input type="text" id="message" placeholder="Message"><br>
+
+    <label for="shift">Enter the shift value (an integer):</label>
+    <input type="number" id="shift" placeholder="Shift Value"><br>
+
+    <!-- Buttons for encoding and decoding -->
+    <button onclick="encodeMessage()">Encode</button>
+    <button onclick="decodeMessage()">Decode</button>
+
+    <!-- Display the encoded/decoded message here -->
+    <p id="encodedMessage">Result will appear here</p>
+
+    <script>
+        // Function to perform Caesar cipher encoding
+        function caesarCipherEncoder(text, shift) {
+            let result = "";
+
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+
+                if (/[a-zA-Z]/.test(char)) {
+                    let isLowerCase = char === char.toLowerCase();
+                    let charCode = char.charCodeAt(0) - (isLowerCase ? 97 : 65);
+                    let encodedCharCode = (charCode + shift) % 26;
+                    if (encodedCharCode < 0) {
+                        encodedCharCode += 26;
+                    }
+                    result += String.fromCharCode(encodedCharCode + (isLowerCase ? 97 : 65));
+                } else {
+                    result += char;
+                }
+            }
+
+            return result;
+        }
+
+        // Function to perform Caesar cipher decoding (reverse encoding)
+        function caesarCipherDecoder(text, shift) {
+            // To decode, we'll shift in the opposite direction by using a negative shift value
+            return caesarCipherEncoder(text, -shift);
+        }
+
+        // Function to encode the message and update the page
+        function encodeMessage() {
+            const messageInput = document.getElementById("message");
+            const shiftInput = document.getElementById("shift");
+            const encodedMessageOutput = document.getElementById("encodedMessage");
+
+            // Get the input values
+            const message = messageInput.value;
+            const shift = parseInt(shiftInput.value);
+
+            if (!message || isNaN(shift)) {
+                // Display an error message if inputs are missing or invalid
+                encodedMessageOutput.innerText = "Please enter a message and a valid shift value.";
+            } else {
+                // Encode the message and display the result
+                const encodedMessage = caesarCipherEncoder(message, shift);
+                encodedMessageOutput.innerText = "Encoded message: " + encodedMessage;
+            }
+        }
+
+        // Function to decode the message and update the page
+        function decodeMessage() {
+            const messageInput = document.getElementById("message");
+            const shiftInput = document.getElementById("shift");
+            const encodedMessageOutput = document.getElementById("encodedMessage");
+
+            // Get the input values
+            const message = messageInput.value;
+            const shift = parseInt(shiftInput.value);
+
+            if (!message || isNaN(shift)) {
+                // Display an error message if inputs are missing or invalid
+                encodedMessageOutput.innerText = "Please enter a message and a valid shift value.";
+            } else {
+                // Decode the message and display the result
+                const decodedMessage = caesarCipherDecoder(message, shift);
+                encodedMessageOutput.innerText = "Decoded message: " + decodedMessage;
+            }
+        }
+    </script>
+</body>
+</html>
